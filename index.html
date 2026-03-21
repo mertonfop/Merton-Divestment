@@ -39,6 +39,7 @@ body {
 
 .logo-text {
   font-size: 14px;
+  font-weight: 400;
 }
 
 .share-btn {
@@ -48,6 +49,7 @@ body {
   padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .banner-main {
@@ -61,18 +63,41 @@ body {
   margin: 30px auto;
 }
 
+.intro {
+  margin-bottom: 30px;
+}
+
+.intro p em {
+  font-style: italic;
+  font-size: 16px;
+}
+
+.small {
+  font-size: 14px;
+  color: #555;
+}
+
 .box {
   background: white;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-top: 10px;
   text-align: left;
 }
 
-input {
+.box p {
+  margin: 8px 0 4px 0;
+  font-weight: bold;
+}
+
+input[type="text"] {
   width: 92%;
   padding: 12px;
   margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 button {
@@ -82,15 +107,56 @@ button {
   padding: 14px 22px;
   cursor: pointer;
   border-radius: 6px;
+  font-size: 16px;
 }
+
+button:hover { background: #218838; }
 
 .hidden { display: none; }
 
 .result-card {
-  margin-top: 20px;
+  background: #ffffff;
   padding: 20px;
-  background: white;
+  margin-top: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.step1-complete {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.tick-box {
+  width: 20px;
+  height: 20px;
+  background: #28a745;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.sample-title {
+  color: #28a745;
+  font-weight: bold;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.sample-box {
+  background: #e6f4ea;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+  text-align: left;
+  white-space: pre-line;
 }
 
 .modal {
@@ -110,6 +176,7 @@ button {
   padding: 20px;
   width: 300px;
   border-radius: 10px;
+  text-align: center;
 }
 
 .modal-content button {
@@ -121,9 +188,29 @@ button {
 .modal-close {
   background: #555 !important;
 }
+
+.footer-social {
+  margin-top: 30px;
+  padding-bottom: 40px;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 22px;
+}
+
+.footer-icons a {
+  color: #1f4d2e;
+  text-decoration: none;
+}
+
+.step2 { display: none; }
+.step2.active { display: block; }
+
 </style>
 </head>
-
 <body>
 
 <div class="banner">
@@ -132,9 +219,7 @@ button {
       <img src="https://mertonfop.github.io/Merton-Divestment/logo.png">
       <div class="logo-text">Merton Friends of Palestine</div>
     </div>
-    <button class="share-btn" onclick="openShare()">
-      <i class="fa-solid fa-share"></i>
-    </button>
+    <button class="share-btn" onclick="openShare()"><i class="fa-solid fa-share"></i></button>
   </div>
 
   <div class="banner-main">
@@ -142,7 +227,6 @@ button {
   </div>
 </div>
 
-<!-- SHARE MODAL -->
 <div class="modal" id="shareModal">
   <div class="modal-content">
     <h3>Share</h3>
@@ -156,8 +240,17 @@ button {
 
 <div class="container">
 
+<div class="intro">
+<p>
+<em>Email your councillors in under 60 seconds.</em><br>
+<em>Enter your postcode to get started.</em><br>
+<span class="small">We respect your privacy - nothing you enter is stored.</span>
+</p>
+</div>
+
 <h3>Step 1: Enter postcode</h3>
 <div class="box">
+<p>Enter your postcode:</p>
 <input type="text" id="postcode" placeholder="SW19 1AB">
 <br>
 <button onclick="findCouncillors()">Find my councillors</button>
@@ -165,17 +258,64 @@ button {
 
 <div id="results" class="hidden"></div>
 
+<div id="step2" class="step2">
+<h3 style="margin-top:50px;">Step 2: Create Your Email</h3>
+<div class="box">
+<p>Full Name</p>
+<input type="text" id="name">
+<p>Address (optional, but more likely to get a reply if included)</p>
+<input type="text" id="address">
+<p>Postcode</p>
+<input type="text" id="postcode2" readonly>
+
+<label>
+<input type="checkbox" id="bcc"> Tick this box to send us a copy of your email so we can track campaign performance
+</label>
+<br><br>
+<button onclick="generateEmail()">Create my email</button>
+</div>
+</div>
+
+<h3 class="sample-title">Sample Letter</h3>
+<p>Prefer to send your own email? Use the sample letter below.</p>
+
+<div class="sample-box">
+Dear Councillor,
+
+I am a resident writing to urge you to support responsible investment in Merton’s pension fund, in line with international human rights standards.
+
+Please encourage the Pensions Committee to contact other councils that share the same LCIV sub-funds as Merton to work together on investment options that avoid companies linked to serious human rights abuses. Other councils have already taken this approach successfully, including councils in LCIV's PEPPA sub-fund.
+
+I also request that Merton’s Responsible Investment Policy be updated to exclude companies involved in war crimes, crimes against humanity, apartheid, illegal settlements, or those providing arms, finance, products or services that enable such abuses anywhere in the world, including companies operating in or supporting Israel’s international law violations in Palestine.
+
+Finally, I ask that all investments be reviewed annually using credible sources such as the UN OHCHR report, the Who Profits database, and the AFSC Investigate watchlist.
+
+Your decision on this issue will influence how I vote in May.
+
+Regards,
+</div>
+
+<div class="footer-social">
+<h4>Join or follow us</h4>
+<div class="footer-icons">
+<a href="https://linktr.ee/mertonfop" target="_blank"><i class="fa-solid fa-link"></i></a>
+<a href="mailto:mertonfop@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+<a href="https://chat.whatsapp.com/BQcotzGTu7AIf5org9SoQo" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+<a href="https://www.instagram.com/merton.fop/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+<a href="https://www.facebook.com/mertonfop/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+<a href="https://x.com/mertonfop" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+</div>
+</div>
+
 </div>
 
 <script>
-// Modal
 function openShare(){ document.getElementById('shareModal').style.display='block'; }
 function closeShare(){ document.getElementById('shareModal').style.display='none'; }
 
-// Share links (YOUR URLs)
 function shareLink(type){
   if(type==='email'){
-    window.location.href='mailto:?subject=1-minute%20action%3A%20Merton%20divestment&body=Hi%2C%0D%0A%0D%0AI%20just%20did%20this%20quick%201-minute%20action%20and%20thought%20you%20might%20want%20to%20as%20well%20-%20it%E2%80%99s%20to%20urge%20Merton%20Council%20to%20go%20further%20on%20divestment%3A%0D%0A%0D%0Ahttps%3A%2F%2Fmertonfop.github.io%2FMerton-Divestment%2F';
+    window.location.href='mailto:?subject=1-minute%20action%3A%20Merton%20divestment&body=Hi%2C%0D%0A%0D%0AI%20just%20did%20this%20quick%201-minute%20action%20and%20thought%20you%20might%20want%20to%20as%20well%20-%20it%E2%80%99s%20to%20urge%20Merton%20Council%20to%20go%20further%20on%20divestment%3A%0D%0A%0D%0Ahttps%3A%2F%2Fmertonfop.github.io%2FMerton-Divestment%2F%0D%0A%0D%0ALocal%20pressure%20has%20been%20working%2C%20and%20this%20could%20help%20push%20them%20further.%0D%0A%0D%0AThanks!';
   } 
   else if(type==='whatsapp'){
     window.open('https://wa.me/?text=Tell%20Merton%20Council%20to%20Stop%20Funding%20Genocide%3A%0D%0Ahttps%3A%2F%2Fmertonfop.github.io%2FMerton-Divestment%2F');
@@ -188,22 +328,9 @@ function shareLink(type){
   }
 }
 
-// Demo councillor finder (replace with your full version if needed)
-async function findCouncillors(){
-  const postcode = document.getElementById('postcode').value;
-  const resultDiv = document.getElementById('results');
-
-  if(!postcode){
-    resultDiv.innerHTML = "<div class='result-card'>Please enter a postcode</div>";
-    resultDiv.classList.remove('hidden');
-    return;
-  }
-
-  resultDiv.innerHTML = "<div class='result-card'>Lookup working (placeholder)</div>";
-  resultDiv.classList.remove('hidden');
-  resultDiv.scrollIntoView({behavior:'smooth'});
-}
+// (rest of your script unchanged)
 </script>
 
 </body>
 </html>
+
