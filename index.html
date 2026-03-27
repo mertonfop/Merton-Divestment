@@ -321,7 +321,7 @@ function shareLink(type){
   } else if(type==='facebook'){
     window.open('https://www.facebook.com/sharer/sharer.php?u=https://mertonfop.github.io/Merton-Divestment/');
   } else if(type==='x'){
-    window.open('https://x.com/intent/post?text=Tell%20Merton%20Council%20to%20Stop%20Funding%20Genocide%3A%0D%0Ahttps%3A%2F%2Fmertonfop.github.io%2FMerton-Divestment%2F');
+    window.open('https://twitter.com/intent/post?text=Tell%20Merton%20Council%20to%20Stop%20Funding%20Genocide%3A%0D%0Ahttps%3A%2F%2Fmertonfop.github.io%2FMerton-Divestment%2F');
   }
 }
 
@@ -350,7 +350,13 @@ const rawWards = {
 
 const wards = {};
 function normalize(text) {
-  return text.toLowerCase().replace(/[’']/g,'').replace(/[^a-z\s]/g,'').trim();
+return text
+.toLowerCase()
+.replace(/\band\b/g, '') // 👈 removes "and"
+.replace(/[’']/g,'')
+.replace(/[^a-z\s]/g,'')
+.replace(/\s+/g, ' ')
+.trim();
 }
 
 for (const ward in rawWards) {
