@@ -204,6 +204,24 @@ button:hover { background: #218838; }
 .step2 { display: none; }
 .step2.active { display: block; }
 
+.bcc-row {
+display: flex;
+align-items: flex-start;
+gap: 10px;
+margin-top: 10px;
+}
+
+.form-error {
+color: #b00020;
+background: #ffe6e6;
+border: 1px solid #ffb3b3;
+padding: 10px;
+border-radius: 6px;
+margin-bottom: 10px;
+display: none;
+font-size: 14px;
+}
+
 </style>
 </head>
 <body>
@@ -263,10 +281,12 @@ Enter your postcode to get started.<br>
 <p>Postcode</p>
 <input type="text" id="postcode2" readonly>
 
-<label>
-<input type="checkbox" id="bcc"> Tick this box to send us a copy of your email so we can track campaign performance
-</label>
+<div class="bcc-row">
+<input type="checkbox" id="bcc">
+<span>Tick this box to send us a copy of your email so we can track campaign performance</span>
+</div>
 <br><br>
+<div id="formError" class="form-error"></div>
 <button onclick="generateEmail()">Create my email</button>
 </div>
 </div>
@@ -366,7 +386,26 @@ for (const ward in rawWards) {
 
 let selectedEmails = [];
 
+function resetStep2Form() {
+  document.getElementById('postcode2').value = "";
+  document.getElementById('name').value = "";
+  document.getElementById('address').value = "";
+
+  setTimeout(() => {
+    document.getElementById('name').value = "";
+    document.getElementById('address').value = "";
+  }, 50);
+}
+
 async function findCouncillors() {
+resetStep2Form();
+selectedEmails = [];
+
+document.getElementById('step2').classList.remove('active');
+
+const errorBox = document.getElementById('formError');
+errorBox.style.display = "none";
+errorBox.textContent = "";
   let postcode = document.getElementById('postcode').value.trim().toUpperCase();
   postcode = postcode.replace(/\s+/g,' ').trim();
 
@@ -407,6 +446,7 @@ async function findCouncillors() {
     }
 
     selectedEmails = wards[wardKey];
+    document.getElementById('step2').classList.add('active');
 
     resultDiv.innerHTML = `
       <div class='result-card'>
@@ -419,7 +459,6 @@ async function findCouncillors() {
       </div>
     `;
 
-    document.getElementById('step2').classList.add('active');
     document.getElementById('postcode2').value = postcode;
 
 setTimeout(() => {
@@ -441,11 +480,15 @@ function generateEmail() {
   }
 
   const name = document.getElementById('name').value.trim();
-if (!name) {
-alert("Please enter your name");
-return;
-}
+const errorBox = document.getElementById('formError');
 
+if (!name) {
+errorBox.textContent = "Please enter your name";
+errorBox.style.display = "block";
+return;
+} else {
+errorBox.style.display = "none";
+}
   const address = document.getElementById('address').value;
   const postcode = document.getElementById('postcode2').value;
 
