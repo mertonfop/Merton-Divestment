@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+doc<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -328,7 +328,7 @@ function shareLink(type){
 const rawWards = {
   "Abbey": ["john.braithwaite@merton.gov.uk","mike.brunt@merton.gov.uk","klaar.dresselaers@merton.gov.uk"],
   "Cannon Hill": ["nick.mclean@merton.gov.uk","michael.paterson@merton.gov.uk"],
-  "Colliers Wood": ["laxmi.attawar@merton.gov.uk","Caroline.Cooper-Marbiah@merton.gov.uk","stuart.neaverson@merton.gov.uk"],
+  "Colliers Wood": ["laxmi.attawar@merton.gov.uk","caroline.cooper-marbiah@merton.gov.uk","stuart.neaverson@merton.gov.uk"],
   "Cricket Green": ["michael.butcher@merton.gov.uk","usaama.kaweesa@merton.gov.uk","gill.manly@merton.gov.uk"],
   "Figge's Marsh": ["agatha.akyigyina@merton.gov.uk","dan.johnston@merton.gov.uk","franca.ofeimu@merton.gov.uk"],
   "Graveney": ["sheriann.bhim@merton.gov.uk","billy.hayes@merton.gov.uk","linda.kirby@merton.gov.uk"],
@@ -422,6 +422,13 @@ async function findCouncillors() {
     document.getElementById('step2').classList.add('active');
     document.getElementById('postcode2').value = postcode;
 
+setTimeout(() => {
+document.getElementById('step2').scrollIntoView({
+behavior: 'smooth',
+block: 'start'
+});
+}, 100);
+
   } catch (error) {
     resultDiv.innerHTML = "<div class='result-card'>Unable to fetch postcode data.</div>";
   }
@@ -433,7 +440,12 @@ function generateEmail() {
     return;
   }
 
-  const name = document.getElementById('name').value;
+  const name = document.getElementById('name').value.trim();
+if (!name) {
+alert("Please enter your name");
+return;
+}
+
   const address = document.getElementById('address').value;
   const postcode = document.getElementById('postcode2').value;
 
